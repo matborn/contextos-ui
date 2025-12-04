@@ -7,6 +7,8 @@ import { PageHeader } from '../components/ui/PageHeader';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
+import { Slider } from '../components/ui/Slider';
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '../components/ui/Table';
 import { fetchFinancialSnapshot, fetchScenarios } from '../services/lifeService';
 import { cn } from '../utils';
 
@@ -154,22 +156,26 @@ export const LifeOS: React.FC<LifeOSProps> = ({ onExit, onLaunch }) => {
                 <div className="md:col-span-1 space-y-6">
                     <Card className="p-6 space-y-6">
                         <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Monthly Savings</label>
-                            <input 
-                                type="range" min="0" max="10000" step="100" 
-                                value={savingsRate} onChange={(e) => setSavingsRate(Number(e.target.value))}
-                                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-teal-600"
+                            <Slider
+                                label="Monthly Savings"
+                                min={0}
+                                max={10000}
+                                step={100}
+                                value={savingsRate}
+                                onChange={(e) => setSavingsRate(Number(e.target.value))}
+                                formatValue={(val) => formatCurrency(val)}
                             />
-                            <div className="text-right font-mono font-bold text-teal-700 mt-1">{formatCurrency(savingsRate)}</div>
                         </div>
                         <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Assumed Return</label>
-                            <input 
-                                type="range" min="2" max="12" step="0.5" 
-                                value={returnRate} onChange={(e) => setReturnRate(Number(e.target.value))}
-                                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-teal-600"
+                            <Slider
+                                label="Assumed Return"
+                                min={2}
+                                max={12}
+                                step={0.5}
+                                value={returnRate}
+                                onChange={(e) => setReturnRate(Number(e.target.value))}
+                                formatValue={(val) => `${val}%`}
                             />
-                            <div className="text-right font-mono font-bold text-teal-700 mt-1">{returnRate}% p.a.</div>
                         </div>
                         <div>
                             <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Inflation</label>
@@ -218,41 +224,45 @@ export const LifeOS: React.FC<LifeOSProps> = ({ onExit, onLaunch }) => {
             
             <div className="mt-8 space-y-6">
                 <Card>
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left text-sm">
-                            <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
-                                <tr>
-                                    <th className="px-6 py-3">Asset</th>
-                                    <th className="px-6 py-3">Type</th>
-                                    <th className="px-6 py-3 text-right">Value</th>
-                                    <th className="px-6 py-3 text-right">Performance</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-100">
-                                {snapshot?.assets.map(asset => (
-                                    <tr key={asset.id} className="hover:bg-slate-50">
-                                        <td className="px-6 py-4 font-medium text-slate-900">{asset.name}</td>
-                                        <td className="px-6 py-4 capitalize text-slate-500">{asset.type}</td>
-                                        <td className={cn("px-6 py-4 text-right font-mono font-medium", asset.value < 0 ? "text-red-600" : "text-slate-900")}>
-                                            {formatCurrency(asset.value)}
-                                        </td>
-                                        <td className="px-6 py-4 text-right">
-                                            {asset.growthRate ? (
-                                                <Badge status="success">+{asset.growthRate}%</Badge>
-                                            ) : <span className="text-slate-300">-</span>}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                            <tfoot className="bg-slate-50 border-t border-slate-200">
-                                <tr>
-                                    <td colSpan={2} className="px-6 py-4 font-bold text-slate-700">Total Net Worth</td>
-                                    <td className="px-6 py-4 text-right font-bold text-slate-900 text-lg">{formatCurrency(snapshot?.netWorth || 0)}</td>
-                                    <td></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Asset</TableHead>
+                                <TableHead>Type</TableHead>
+                                <TableHead className="text-right">Value</TableHead>
+                                <TableHead className="text-right">Performance</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody colSpan={4} emptyMessage="No assets yet.">
+                            {snapshot?.assets.map((asset) => (
+                                <TableRow key={asset.id} interactive>
+                                    <TableCell className="font-medium text-slate-900">{asset.name}</TableCell>
+                                    <TableCell className="capitalize text-slate-500">{asset.type}</TableCell>
+                                    <TableCell className={cn("text-right font-mono font-medium", asset.value < 0 ? "text-red-600" : "text-slate-900")}>
+                                        {formatCurrency(asset.value)}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {asset.growthRate ? (
+                                            <Badge status="success">+{asset.growthRate}%</Badge>
+                                        ) : (
+                                            <span className="text-slate-300">-</span>
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableCell colSpan={2} className="font-bold text-slate-700">
+                                    Total Net Worth
+                                </TableCell>
+                                <TableCell className="text-right font-bold text-slate-900 text-lg">
+                                    {formatCurrency(snapshot?.netWorth || 0)}
+                                </TableCell>
+                                <TableCell />
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
                 </Card>
             </div>
          </div>
