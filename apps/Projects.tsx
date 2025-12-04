@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
 import { NavItem, Project, Workspace } from '../types';
 import { Home, Folder, Settings } from '../components/icons/Icons';
-import { ProjectsHub } from '../pages/ProjectsHub';
+import { ProjectsHub } from '../screens/ProjectsHub';
 import { generateId } from '../utils';
 
 interface ProjectsAppProps {

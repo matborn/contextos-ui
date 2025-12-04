@@ -17,8 +17,11 @@ import {
 } from "../types";
 import { generateId } from "../utils";
 
-// Initialize the API client
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const isServer = typeof window === 'undefined';
+const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
+
+// Initialize the API client only on the server when a key is present
+const ai = isServer && apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 // --- IN-MEMORY GRAPH STORE (SIMULATION) ---
 
@@ -344,73 +347,88 @@ export const ingestText = async (
     onProgress?: (stage: string) => void
 ): Promise<void> => {
   try {
-    // 1. EXTRACTION
+    // 1. EXTRACTION (real AI if available, otherwise mock)
     if (onProgress) onProgress('extracting');
-    
-    const prompt = `
-      You are a Knowledge Graph Engineer for ContextOS.
-      Analyze the provided text and extract "Atoms" (atomic units of knowledge) and "Relations" (links between them).
-      
-      Atom Types: 'fact' | 'decision' | 'risk' | 'assumption' | 'requirement'
-      Relation Types: 'supports' | 'contradicts' | 'related'
-      
-      For Decisions, try to extract DACI roles (Driver, Approver, Contributor, Informed) if mentioned.
-      For Risks, extract the severity (high/low).
-      
-      Return a JSON object matching the schema.
-    `;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: {
-        parts: [
-          { text: prompt },
-          { text: `TEXT TO ANALYZE:\n${text}` }
-        ]
-      },
-      config: {
-        responseMimeType: 'application/json',
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            atoms: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  statement: { type: Type.STRING, description: "The core fact or statement" },
-                  type: { type: Type.STRING, enum: ['fact', 'decision', 'risk', 'assumption', 'requirement'] },
-                  confidence: { type: Type.NUMBER, description: "Confidence 0-100" },
-                  meta: { 
-                     type: Type.OBJECT,
-                     properties: {
-                         driver: { type: Type.STRING },
-                         approver: { type: Type.STRING },
-                         impact: { type: Type.STRING }
-                     }
-                  }
-                },
-                required: ['statement', 'type', 'confidence']
-              }
-            },
-            relations: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  fromIndex: { type: Type.INTEGER, description: "Index of the source atom in the returned atoms array" },
-                  toIndex: { type: Type.INTEGER, description: "Index of the target atom" },
-                  type: { type: Type.STRING, enum: ['supports', 'contradicts', 'related'] }
-                },
-                required: ['fromIndex', 'toIndex', 'type']
+    let data: any;
+
+    if (ai) {
+      const prompt = `
+        You are a Knowledge Graph Engineer for ContextOS.
+        Analyze the provided text and extract "Atoms" (atomic units of knowledge) and "Relations" (links between them).
+        
+        Atom Types: 'fact' | 'decision' | 'risk' | 'assumption' | 'requirement'
+        Relation Types: 'supports' | 'contradicts' | 'related'
+        
+        For Decisions, try to extract DACI roles (Driver, Approver, Contributor, Informed) if mentioned.
+        For Risks, extract the severity (high/low).
+        
+        Return a JSON object matching the schema.
+      `;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: {
+          parts: [
+            { text: prompt },
+            { text: `TEXT TO ANALYZE:\n${text}` }
+          ]
+        },
+        config: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              atoms: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    statement: { type: Type.STRING, description: "The core fact or statement" },
+                    type: { type: Type.STRING, enum: ['fact', 'decision', 'risk', 'assumption', 'requirement'] },
+                    confidence: { type: Type.NUMBER, description: "Confidence 0-100" },
+                    meta: { 
+                       type: Type.OBJECT,
+                       properties: {
+                           driver: { type: Type.STRING },
+                           approver: { type: Type.STRING },
+                           impact: { type: Type.STRING }
+                       }
+                    }
+                  },
+                  required: ['statement', 'type', 'confidence']
+                }
+              },
+              relations: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    fromIndex: { type: Type.INTEGER, description: "Index of the source atom in the returned atoms array" },
+                    toIndex: { type: Type.INTEGER, description: "Index of the target atom" },
+                    type: { type: Type.STRING, enum: ['supports', 'contradicts', 'related'] }
+                  },
+                  required: ['fromIndex', 'toIndex', 'type']
+                }
               }
             }
           }
         }
-      }
-    });
+      });
 
-    const data = JSON.parse(response.text || '{}');
+      data = JSON.parse(response.text || '{}');
+    } else {
+      // Mock extraction path for browser / missing key
+      data = {
+        atoms: [
+          { statement: text.substring(0, 80) || 'Captured requirement', type: 'requirement', confidence: 92, meta: {} },
+          { statement: 'Risk: latency may exceed 100ms under peak load', type: 'risk', confidence: 78, meta: { impact: 'high' } }
+        ],
+        relations: [
+          { fromIndex: 0, toIndex: 1, type: 'related' }
+        ]
+      };
+    }
     
     // Process and Persist
     const newAtoms: Atom[] = [];

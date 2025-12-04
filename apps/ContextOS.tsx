@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
 import { NavItem, ContextView, AppMode, Workspace } from '../types';
 import { Database, Network, Settings, Home, Activity } from '../components/icons/Icons';
-import { LandingPage } from '../pages/LandingPage';
-import { KnowledgeBase } from '../pages/KnowledgeBase';
-import { Settings as SettingsPage } from '../pages/Settings';
-import { Workspace as WorkspaceDashboard } from '../pages/Workspace';
+import { LandingPage } from '../screens/LandingPage';
+import { KnowledgeBase } from '../screens/KnowledgeBase';
+import { Settings as SettingsPage } from '../screens/Settings';
+import { Workspace as WorkspaceDashboard } from '../screens/Workspace';
 import { generateId } from '../utils';
 
 interface ContextOSProps {

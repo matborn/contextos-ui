@@ -3,17 +3,17 @@
 import React, { useState } from 'react';
 import { AppId, User, AuthView, ContextView } from './types';
 import { ToastProvider } from './components/ui/Toast';
-import { Launcher } from './pages/Launcher';
+import { Launcher } from './screens/Launcher';
 import { ContextOS } from './apps/ContextOS';
 import { LifeOS } from './apps/LifeOS';
 import { AppBuilder } from './apps/AppBuilder';
 import { Scriptor } from './apps/Scriptor';
 import { Muse } from './apps/Muse';
 import { Projects } from './apps/Projects';
-import { LoginPage } from './pages/auth/LoginPage';
-import { RegisterPage } from './pages/auth/RegisterPage';
-import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
-import { ProfilePage } from './pages/auth/ProfilePage';
+import { LoginPage } from './screens/auth/LoginPage';
+import { RegisterPage } from './screens/auth/RegisterPage';
+import { ForgotPasswordPage } from './screens/auth/ForgotPasswordPage';
+import { ProfilePage } from './screens/auth/ProfilePage';
 import { Button } from './components/ui/Button';
 import { ChevronLeft } from './components/icons/Icons';
 
