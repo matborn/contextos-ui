@@ -1,11 +1,11 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { AgentMessage } from '../types';
-import { Bot, Sparkles, Database, Search } from '../components/icons/Icons';
-import { cn } from '../utils';
-import { getAgentResponse } from '../services/geminiService';
-import { MarkdownRenderer } from '../components/ui/MarkdownRenderer';
-import { AgentInput } from '../components/ui/AgentInput';
+import { AgentMessage } from '@/types';
+import { Bot, Sparkles, Database, Search } from '@/components/icons/Icons';
+import { cn } from '@/utils';
+import { getAgentResponse } from '@/services/geminiService';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { AgentInput } from '@/components/ui/AgentInput';
 
 export const KnowledgeChat: React.FC = () => {
     const [messages, setMessages] = useState<AgentMessage[]>([

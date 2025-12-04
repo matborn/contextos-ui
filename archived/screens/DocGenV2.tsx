@@ -1,11 +1,11 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { AgentMessage, DocumentSection } from '../types';
-import { Bot, ArrowRight, FilePen, ChevronRight, MessageCircle, GitPullRequest, ShieldCheck, Database, Target, ChevronLeft, Sparkles, ListChecks, CheckCircle, AlertCircle, Loader2, Check } from '../components/icons/Icons';
-import { cn, generateId } from '../utils';
-import { useToast } from '../components/ui/Toast';
-import { DocumentViewer } from '../components/DocumentViewer';
-import { Badge } from '../components/ui/Badge';
+import { AgentMessage, DocumentSection } from '@/types';
+import { Bot, ArrowRight, FilePen, ChevronRight, MessageCircle, GitPullRequest, ShieldCheck, Database, Target, ChevronLeft, Sparkles, ListChecks, CheckCircle, AlertCircle, Loader2, Check } from '@/components/icons/Icons';
+import { cn, generateId } from '@/utils';
+import { useToast } from '@/components/ui/Toast';
+import { DocumentViewer } from '@/components/DocumentViewer';
+import { Badge } from '@/components/ui/Badge';
 
 // --- Persona Definitions ---
 interface Persona {

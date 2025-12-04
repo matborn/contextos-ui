@@ -1,10 +1,10 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { AgentMsg } from '../components/ui/AgentMsg';
-import { Button } from '../components/ui/Button';
-import { Badge } from '../components/ui/Badge';
-import { Card } from '../components/ui/Card';
-import { AgentMessage } from '../types';
+import { AgentMsg } from '@/components/ui/AgentMsg';
+import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
+import { Card } from '@/components/ui/Card';
+import { AgentMessage } from '@/types';
 import { 
     Bot, 
     Passport, 
@@ -19,10 +19,10 @@ import {
     Sparkles,
     CheckCircle,
     ArrowRight
-} from '../components/icons/Icons';
-import { cn } from '../utils';
-import { useToast } from '../components/ui/Toast';
-import { AgentInput } from '../components/ui/AgentInput';
+} from '@/components/icons/Icons';
+import { cn } from '@/utils';
+import { useToast } from '@/components/ui/Toast';
+import { AgentInput } from '@/components/ui/AgentInput';
 
 type Persona = 'travel' | 'loan' | 'wealth';
 

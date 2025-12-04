@@ -1,13 +1,13 @@
 
 
 import React, { useState, useRef, useEffect } from 'react';
-import { AgentMsg } from '../components/ui/AgentMsg';
-import { Button } from '../components/ui/Button';
-import { DocumentViewer } from '../components/DocumentViewer';
-import { DocumentSection, AgentMessage } from '../types';
-import { Bot, ArrowRight, Sparkles, FilePen, ChevronRight } from '../components/icons/Icons';
-import { cn, generateId } from '../utils';
-import { useToast } from '../components/ui/Toast';
+import { AgentMsg } from '@/components/ui/AgentMsg';
+import { Button } from '@/components/ui/Button';
+import { DocumentViewer } from '@/components/DocumentViewer';
+import { DocumentSection, AgentMessage } from '@/types';
+import { Bot, ArrowRight, Sparkles, FilePen, ChevronRight } from '@/components/icons/Icons';
+import { cn, generateId } from '@/utils';
+import { useToast } from '@/components/ui/Toast';
 
 // Mock Templates
 const LOAN_TEMPLATE: DocumentSection[] = [

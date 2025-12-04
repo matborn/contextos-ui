@@ -1,18 +1,18 @@
 
 
 import React, { useState, useRef, useEffect } from 'react';
-import { AgentMessage, DocumentSection } from '../types';
+import { AgentMessage, DocumentSection } from '@/types';
 import { 
     Bot, ArrowRight, FilePen, ChevronRight, MessageCircle, 
     GitPullRequest, ShieldCheck, Database, Target, ChevronLeft, 
     Sparkles, ListChecks, CheckCircle, AlertCircle, Loader2, 
     Check, Users, Clock, Zap, Activity, Filter, Lock, Plus
-} from '../components/icons/Icons';
-import { cn, generateId } from '../utils';
-import { useToast } from '../components/ui/Toast';
-import { Badge } from '../components/ui/Badge';
-import { Button } from '../components/ui/Button';
-import { MarkdownRenderer } from '../components/ui/MarkdownRenderer';
+} from '@/components/icons/Icons';
+import { cn, generateId } from '@/utils';
+import { useToast } from '@/components/ui/Toast';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 
 // --- Domain Models ---
 
