@@ -114,7 +114,6 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="What is this project about?"
-                className="min-h-[100px]"
               />
               
               <div className="space-y-2">
@@ -204,7 +203,7 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                                     <div className="text-xs text-slate-500">AI Documents</div>
                                 </div>
                             </div>
-                            <Checkbox label="Enabled" checked readOnly disabled />
+                            <Checkbox label="Enabled" checked disabled />
                         </div>
                         <div className="flex items-center justify-between p-3 border border-slate-200 rounded-lg bg-white">
                             <div className="flex items-center gap-3">
@@ -214,7 +213,7 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                                     <div className="text-xs text-slate-500">Brainstorming</div>
                                 </div>
                             </div>
-                            <Checkbox label="Enabled" checked readOnly disabled />
+                            <Checkbox label="Enabled" checked disabled />
                         </div>
                     </div>
                 </div>

@@ -369,7 +369,6 @@ export const Settings: React.FC<SettingsProps> = ({ workspace }) => {
                         <Textarea
                           label="Description"
                           defaultValue={workspace?.description || "Global payment gateway integration and rollout strategy."}
-                          className="min-h-[120px]"
                         />
                     </CardContent>
                     <CardFooter className="justify-end">
@@ -396,7 +395,7 @@ export const Settings: React.FC<SettingsProps> = ({ workspace }) => {
                                 
                                 <RadioGroup
                                   value={visibility}
-                                  onChange={(val) => setVisibility(val)}
+                                  onChange={(val) => setVisibility(val as 'private' | 'protected' | 'public')}
                                   orientation="vertical"
                                   helperText="Control workspace exposure."
                                 >

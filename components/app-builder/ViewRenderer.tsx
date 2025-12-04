@@ -210,7 +210,7 @@ const SmartForm: React.FC<{ spec: SmartFormSpec, onToggleFreeze?: (id: string) =
                             }
                           />
                         ) : field.type === 'textarea' ? (
-                          <Textarea label={field.label} placeholder={field.placeholder} className="min-h-[96px]" />
+                          <Textarea label={field.label} placeholder={field.placeholder} />
                         ) : (
                           <Input
                             label={field.label}

@@ -5,6 +5,7 @@ Concise, front-end–focused guardrails that harmonize with our design system an
 - Prefer explicit dependencies (props/hooks/params); avoid hidden singletons. Scoped React context is fine; justify any new global store.
 - Keep business/interaction logic decoupled from I/O (fetch/SDK calls). Pass data/clients in; do not create them deep in components.
 - Use stable technical names in code (per ADR); keep marketing names in copy/mapping tables.
+- Archived surfaces stay frozen—do not refactor, restyle, or DS-migrate anything under `archived/` unless a ticket explicitly scopes a fix there.
 
 ## Components & Layout
 - One component, one purpose; if you need “and” to describe it, split it.
