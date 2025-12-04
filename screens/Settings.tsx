@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
+import { Textarea } from '../components/ui/Textarea';
+import { RadioGroup, Radio } from '../components/ui/Radio';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../components/ui/Card';
 import { Connectors } from '../components/ui/Connectors';
 import { Badge } from '../components/ui/Badge';
@@ -24,7 +26,6 @@ import {
     HelpCircle,
     Lock,
     Globe,
-    Eye
 } from '../components/icons/Icons';
 import { fetchDataSources, generateValidationRule, fetchElicitationMethods } from '../services/geminiService';
 import { useToast } from '../components/ui/Toast';
@@ -60,6 +61,7 @@ export const Settings: React.FC<SettingsProps> = ({ workspace }) => {
       { id: 'r1', label: 'Tone & Complexity', type: 'ai', severity: 'warning', description: 'Ensure content is readable by non-technical stakeholders.', isActive: true },
       { id: 'r2', label: 'Security Team Approval', type: 'manual', severity: 'blocking', description: 'Required for any architecture changes.', isActive: true }
   ]);
+  const [visibility, setVisibility] = useState<'private' | 'protected' | 'public'>(workspace?.visibility ?? 'private');
   
   // Rule Builder State
   const [isRuleModalOpen, setIsRuleModalOpen] = useState(false);
@@ -364,13 +366,11 @@ export const Settings: React.FC<SettingsProps> = ({ workspace }) => {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <Input label="Workspace Name" defaultValue={workspace?.name || "Project Titan"} />
-                        <div className="space-y-1.5">
-                            <label className="block text-sm font-medium text-slate-700">Description</label>
-                            <textarea 
-                                className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all duration-200 text-sm min-h-[100px]"
-                                defaultValue={workspace?.description || "Global payment gateway integration and rollout strategy."}
-                            />
-                        </div>
+                        <Textarea
+                          label="Description"
+                          defaultValue={workspace?.description || "Global payment gateway integration and rollout strategy."}
+                          className="min-h-[120px]"
+                        />
                     </CardContent>
                     <CardFooter className="justify-end">
                         <Button onClick={() => showToast('Settings Saved', { type: 'success' })}>Save Changes</Button>
@@ -394,52 +394,40 @@ export const Settings: React.FC<SettingsProps> = ({ workspace }) => {
                                     Control who can see and join this workspace. This affects all knowledge and documents contained within.
                                 </p>
                                 
-                                <div className="space-y-3">
-                                    <label className={cn(
-                                        "flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all",
-                                        workspace?.visibility === 'private' ? "bg-blue-50 border-blue-200 ring-1 ring-blue-200" : "bg-white border-slate-200 hover:border-slate-300"
-                                    )}>
-                                        <input type="radio" name="vis" defaultChecked={workspace?.visibility === 'private'} className="mt-1" />
-                                        <div>
-                                            <div className="flex items-center gap-2 font-semibold text-slate-900">
-                                                <Lock size={16} /> Private
-                                            </div>
-                                            <p className="text-sm text-slate-500 mt-1">
-                                                Only invited members can access. Not visible in the organization directory.
-                                            </p>
-                                        </div>
-                                    </label>
-
-                                    <label className={cn(
-                                        "flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all",
-                                        workspace?.visibility === 'protected' ? "bg-blue-50 border-blue-200 ring-1 ring-blue-200" : "bg-white border-slate-200 hover:border-slate-300"
-                                    )}>
-                                        <input type="radio" name="vis" defaultChecked={workspace?.visibility === 'protected'} className="mt-1" />
-                                        <div>
-                                            <div className="flex items-center gap-2 font-semibold text-slate-900">
-                                                <Eye size={16} /> Protected
-                                            </div>
-                                            <p className="text-sm text-slate-500 mt-1">
-                                                Visible to the organization. Access must be requested and approved.
-                                            </p>
-                                        </div>
-                                    </label>
-
-                                    <label className={cn(
-                                        "flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all",
-                                        workspace?.visibility === 'public' ? "bg-blue-50 border-blue-200 ring-1 ring-blue-200" : "bg-white border-slate-200 hover:border-slate-300"
-                                    )}>
-                                        <input type="radio" name="vis" defaultChecked={workspace?.visibility === 'public'} className="mt-1" />
-                                        <div>
-                                            <div className="flex items-center gap-2 font-semibold text-slate-900">
-                                                <Globe size={16} /> Public (Internal)
-                                            </div>
-                                            <p className="text-sm text-slate-500 mt-1">
-                                                Open to everyone in your organization to join and view.
-                                            </p>
-                                        </div>
-                                    </label>
-                                </div>
+                                <RadioGroup
+                                  value={visibility}
+                                  onChange={(val) => setVisibility(val)}
+                                  orientation="vertical"
+                                  helperText="Control workspace exposure."
+                                >
+                                  <Radio
+                                    value="private"
+                                    label="Private"
+                                    description="Only invited members can access. Not visible in the organization directory."
+                                    className={cn(
+                                      "p-4 rounded-xl border",
+                                      visibility === 'private' ? "bg-blue-50 border-blue-200 ring-1 ring-blue-200" : "bg-white border-slate-200 hover:border-slate-300"
+                                    )}
+                                  />
+                                  <Radio
+                                    value="protected"
+                                    label="Protected"
+                                    description="Visible to the organization. Access must be requested and approved."
+                                    className={cn(
+                                      "p-4 rounded-xl border",
+                                      visibility === 'protected' ? "bg-blue-50 border-blue-200 ring-1 ring-blue-200" : "bg-white border-slate-200 hover:border-slate-300"
+                                    )}
+                                  />
+                                  <Radio
+                                    value="public"
+                                    label="Public (Internal)"
+                                    description="Open to everyone in your organization to join and view."
+                                    className={cn(
+                                      "p-4 rounded-xl border",
+                                      visibility === 'public' ? "bg-blue-50 border-blue-200 ring-1 ring-blue-200" : "bg-white border-slate-200 hover:border-slate-300"
+                                    )}
+                                  />
+                                </RadioGroup>
                             </div>
 
                             <div className="h-px bg-slate-100"></div>

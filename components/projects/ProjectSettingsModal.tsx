@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import { Project, Workspace } from '../../types';
 import { Modal } from '../ui/Modal';
 import { Input } from '../ui/Input';
+import { Textarea } from '../ui/Textarea';
+import { Select } from '../ui/Select';
+import { Checkbox } from '../ui/Checkbox';
 import { Button } from '../ui/Button';
 import { Database, ShieldCheck, Users, Settings, Check, LayoutTemplate, Zap, Network, FileText, MessageSquare } from '../icons/Icons';
 import { cn } from '../../utils';
@@ -106,15 +109,13 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
-              <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-slate-700">Description</label>
-                <textarea 
-                  className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none text-sm min-h-[80px]"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="What is this project about?"
-                />
-              </div>
+              <Textarea
+                label="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="What is this project about?"
+                className="min-h-[100px]"
+              />
               
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-slate-700">Color Theme</label>
@@ -158,34 +159,28 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700">Primary Atlas Workspace</label>
-                <select 
-                  className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none text-sm"
-                  value={primaryWorkspaceId}
-                  onChange={(e) => setPrimaryWorkspaceId(e.target.value)}
-                >
-                  <option value="" disabled>Select a workspace...</option>
-                  {availableWorkspaces.map(ws => (
-                    <option key={ws.id} value={ws.id}>{ws.name} (Health: {ws.health}%)</option>
-                  ))}
-                </select>
-                <p className="text-xs text-slate-500">Defines the canonical truth for this project.</p>
-              </div>
+              <Select
+                label="Primary Atlas Workspace"
+                value={primaryWorkspaceId}
+                onChange={(e) => setPrimaryWorkspaceId(e.target.value)}
+                helperText="Defines the canonical truth for this project."
+                placeholder="Select a workspace..."
+                options={availableWorkspaces.map((ws) => ({
+                  value: ws.id,
+                  label: `${ws.name} (Health: ${ws.health}%)`,
+                }))}
+              />
 
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-slate-700">Additional Context (Optional)</label>
                 <div className="space-y-2 border border-slate-200 rounded-lg p-2 max-h-32 overflow-y-auto">
                   {availableWorkspaces.filter(ws => ws.id !== primaryWorkspaceId).map(ws => (
-                    <label key={ws.id} className="flex items-center gap-2 p-2 hover:bg-slate-50 rounded cursor-pointer">
-                      <input 
-                        type="checkbox" 
-                        checked={secondaryWorkspaceIds.includes(ws.id)}
-                        onChange={() => toggleSecondaryWorkspace(ws.id)}
-                        className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-slate-700">{ws.name}</span>
-                    </label>
+                    <Checkbox
+                      key={ws.id}
+                      label={ws.name}
+                      checked={secondaryWorkspaceIds.includes(ws.id)}
+                      onChange={() => toggleSecondaryWorkspace(ws.id)}
+                    />
                   ))}
                   {availableWorkspaces.filter(ws => ws.id !== primaryWorkspaceId).length === 0 && (
                     <p className="text-xs text-slate-400 p-2">No other workspaces available.</p>
@@ -209,7 +204,7 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                                     <div className="text-xs text-slate-500">AI Documents</div>
                                 </div>
                             </div>
-                            <input type="checkbox" checked readOnly className="accent-blue-600 h-4 w-4"/>
+                            <Checkbox label="Enabled" checked readOnly disabled />
                         </div>
                         <div className="flex items-center justify-between p-3 border border-slate-200 rounded-lg bg-white">
                             <div className="flex items-center gap-3">
@@ -219,7 +214,7 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                                     <div className="text-xs text-slate-500">Brainstorming</div>
                                 </div>
                             </div>
-                            <input type="checkbox" checked readOnly className="accent-blue-600 h-4 w-4"/>
+                            <Checkbox label="Enabled" checked readOnly disabled />
                         </div>
                     </div>
                 </div>
@@ -227,20 +222,18 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                 <div className="space-y-3">
                     <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Governance Rules</h4>
                     
-                    <div className="flex items-start gap-3 p-3 border border-slate-200 rounded-lg">
-                        <input type="checkbox" defaultChecked className="mt-1 accent-blue-600" />
-                        <div>
-                            <h5 className="text-sm font-medium text-slate-900">Enforce Atlas Validation</h5>
-                            <p className="text-xs text-slate-500">AI must cite facts from the Primary Workspace.</p>
-                        </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 border border-slate-200 rounded-lg">
-                        <input type="checkbox" defaultChecked className="mt-1 accent-blue-600" />
-                        <div>
-                            <h5 className="text-sm font-medium text-slate-900">Require Peer Review</h5>
-                            <p className="text-xs text-slate-500">Documents cannot be approved without human review.</p>
-                        </div>
-                    </div>
+                    <Checkbox
+                      label="Enforce Atlas Validation"
+                      description="AI must cite facts from the Primary Workspace."
+                      defaultChecked
+                      className="p-3 border border-slate-200 rounded-lg bg-white"
+                    />
+                    <Checkbox
+                      label="Require Peer Review"
+                      description="Documents cannot be approved without human review."
+                      defaultChecked
+                      className="p-3 border border-slate-200 rounded-lg bg-white"
+                    />
                 </div>
             </div>
           )}

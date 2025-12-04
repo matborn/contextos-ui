@@ -6,6 +6,8 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../ui/Card
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { Select } from '../ui/Select';
+import { Textarea } from '../ui/Textarea';
 import { Zap, ArrowRight, TrendingUp, TrendingDown, Minus, Filter, MoreHorizontal, MapPin, Calendar, DollarSign, ShieldAlert, Pin, PinOff } from '../icons/Icons';
 import { cn } from '../../utils';
 
@@ -197,25 +199,25 @@ const SmartForm: React.FC<{ spec: SmartFormSpec, onToggleFreeze?: (id: string) =
                 {spec.fields.map(field => (
                     <div key={field.id}>
                         {field.type === 'select' ? (
-                            <div className="space-y-1.5">
-                                <label className="block text-sm font-medium text-slate-700">{field.label}</label>
-                                <select className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none transition-all">
-                                    <option>Investment</option>
-                                    <option>Owner Occupier</option>
-                                </select>
-                            </div>
+                          <Select
+                            label={field.label}
+                            placeholder="Select an option"
+                            options={
+                              field.options?.map((opt: any) => ({ value: opt.value ?? opt, label: opt.label ?? opt })) ?? [
+                                { value: 'investment', label: 'Investment' },
+                                { value: 'owner', label: 'Owner Occupier' },
+                              ]
+                            }
+                          />
                         ) : field.type === 'textarea' ? (
-                            <div className="space-y-1.5">
-                                <label className="block text-sm font-medium text-slate-700">{field.label}</label>
-                                <textarea className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none transition-all h-24 resize-none" placeholder={field.placeholder} />
-                            </div>
+                          <Textarea label={field.label} placeholder={field.placeholder} className="min-h-[96px]" />
                         ) : (
-                            <Input 
-                                label={field.label} 
-                                placeholder={field.placeholder} 
-                                required={field.required}
-                                className="focus:border-teal-500 focus:ring-teal-500/20"
-                            />
+                          <Input
+                            label={field.label}
+                            placeholder={field.placeholder}
+                            required={field.required}
+                            className="focus:border-teal-500 focus:ring-teal-500/20"
+                          />
                         )}
                     </div>
                 ))}
