@@ -16,7 +16,7 @@ Example titles: `Components/Card`, `Layouts/PageLayout`, `Patterns/AgentInput`.
 - **Description:** what the component does, its primary use cases, and when *not* to use it.
 - **Variants:** all supported visual/behavioral variants (size, tone, state) as separate stories or args controls.
 - **States:** loading, error, empty, disabled, focus/hover/active if applicable.
-- **Controls/Args:** surfaced props that are safe to tweak; sensible defaults.
+- **Controls/Args:** surfaced props that are safe to tweak; sensible defaults. Use Storybook Controls (Args) to make interactive knobs for safe, documented props, and to demonstrate how tokens/theme variants respond. Do not expose controls that break layout, violate a11y, or bypass design tokens.
 - **A11y:** ensure focus-visible rings show in stories; include label/aria examples for form controls.
 - **Theming/tokens:** demonstrate token usage (e.g., brand vs primary) where relevant.
 - **Composition notes:** if the component is meant to be composed (e.g., CardHeader + CardContent), show correct usage.
