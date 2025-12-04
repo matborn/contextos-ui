@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
-import { Card } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
-import { Badge } from '../components/ui/Badge';
-import { ListItem } from '../components/ui/ListItem';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
+import { ListItem } from '@/components/ui/ListItem';
 import { 
     Users, 
     Settings, 
@@ -14,9 +14,9 @@ import {
     AlertCircle, 
     Sparkles,
     CheckCircle,
-} from '../components/icons/Icons';
-import { ContextView } from '../types';
-import { cn } from '../utils';
+} from '@/components/icons/Icons';
+import { ContextView } from '@/types';
+import { cn } from '@/utils';
 
 interface WorkspaceExplorerProps {
   onNavigate: (view: ContextView) => void;

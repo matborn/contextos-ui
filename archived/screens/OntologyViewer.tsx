@@ -1,11 +1,11 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
-import { PageHeader } from '../components/ui/PageHeader';
-import { Badge } from '../components/ui/Badge';
-import { Button } from '../components/ui/Button';
-import { Modal } from '../components/ui/Modal';
-import { Input } from '../components/ui/Input';
-import { useToast } from '../components/ui/Toast';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { Modal } from '@/components/ui/Modal';
+import { Input } from '@/components/ui/Input';
+import { useToast } from '@/components/ui/Toast';
 import { 
     Network, 
     Database, 
@@ -22,10 +22,10 @@ import {
     ArrowRight,
     Sparkles,
     Search
-} from '../components/icons/Icons';
-import { EntityType, OntologyGraph, RelationType, OntologySuggestion } from '../types';
-import { fetchOntologyGraph, fetchOntologySuggestions, generateOntologyFromContext } from '../services/geminiService';
-import { cn } from '../utils';
+} from '@/components/icons/Icons';
+import { EntityType, OntologyGraph, RelationType, OntologySuggestion } from '@/types';
+import { fetchOntologyGraph, fetchOntologySuggestions, generateOntologyFromContext } from '@/services/geminiService';
+import { cn } from '@/utils';
 
 // --- Graph Visualization Logic ---
 

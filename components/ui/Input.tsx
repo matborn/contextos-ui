@@ -12,7 +12,8 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, helperText, leftIcon, rightIcon, id, ...props }, ref) => {
-    const inputId = id || React.useId();
+    const generatedId = React.useId();
+    const inputId = id ?? generatedId;
 
     return (
       <div className="w-full space-y-1.5">
@@ -32,9 +33,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             className={cn(
               "block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all duration-200 sm:text-sm",
-              leftIcon && "pl-10",
-              rightIcon && "pr-10",
-              error && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+              leftIcon ? "pl-10" : undefined,
+              rightIcon ? "pr-10" : undefined,
+              error ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" : undefined,
               className
             )}
             {...props}

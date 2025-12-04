@@ -1,13 +1,13 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Button } from '../components/ui/Button';
-import { AgentMsg } from '../components/ui/AgentMsg';
-import { LayoutTemplate, FileText, ShieldCheck, ArrowRight, CheckCircle, Sparkles, Bot, Zap, Target, HelpCircle, MessageSquare } from '../components/icons/Icons';
-import { cn } from '../utils';
-import { simulateAgentInterview, fetchElicitationMethods } from '../services/geminiService';
-import { AgentMessage, ElicitationMethod } from '../types';
-import { MarkdownRenderer } from '../components/ui/MarkdownRenderer';
-import { AgentInput } from '../components/ui/AgentInput';
+import { Button } from '@/components/ui/Button';
+import { AgentMsg } from '@/components/ui/AgentMsg';
+import { LayoutTemplate, FileText, ShieldCheck, ArrowRight, CheckCircle, Sparkles, Bot, Zap, Target, HelpCircle, MessageSquare } from '@/components/icons/Icons';
+import { cn } from '@/utils';
+import { simulateAgentInterview, fetchElicitationMethods } from '@/services/geminiService';
+import { AgentMessage, ElicitationMethod } from '@/types';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { AgentInput } from '@/components/ui/AgentInput';
 
 interface WizardPageProps {
   onOpenDocument: (id: string, context: any) => void;

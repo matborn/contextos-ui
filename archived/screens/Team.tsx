@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
-import { PageLayout } from '../components/ui/PageLayout';
-import { Avatar } from '../components/ui/Avatar';
-import { Users, Plus, MessageSquare } from '../components/icons/Icons';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { PageLayout } from '@/components/ui/PageLayout';
+import { Avatar } from '@/components/ui/Avatar';
+import { Users, Plus, MessageSquare } from '@/components/icons/Icons';
 
 export const Team: React.FC = () => {
   const members = [

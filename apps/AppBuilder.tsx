@@ -7,8 +7,8 @@ import { ViewRenderer } from '../components/app-builder/ViewRenderer';
 import { generateViewFromIntent, generateInitialDashboard } from '../services/appBuilderService';
 import { useToast } from '../components/ui/Toast';
 import { AgentMsg } from '../components/ui/AgentMsg';
-import { DesignSystem } from '../pages/DesignSystem';
-import { AiPlayground } from '../pages/AiPlayground';
+import { DesignSystem } from '../screens/DesignSystem';
+import { AiPlayground } from '../screens/AiPlayground';
 import { AgentInput } from '../components/ui/AgentInput';
 import { Button } from '../components/ui/Button';
 

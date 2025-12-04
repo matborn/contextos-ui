@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
 import { NavItem, Project, Workspace } from '../types';
 import { MessageSquare, Settings, Home, LayoutTemplate } from '../components/icons/Icons';
-import { MuseDashboard } from '../pages/muse/MuseDashboard';
-import { ProjectSpace } from '../pages/muse/ProjectSpace';
-import { BrainstormSession } from '../pages/muse/BrainstormSession';
-import { ProjectsHub } from '../pages/ProjectsHub';
+import { MuseDashboard } from '../screens/muse/MuseDashboard';
+import { ProjectSpace } from '../screens/muse/ProjectSpace';
+import { BrainstormSession } from '../screens/muse/BrainstormSession';
+import { ProjectsHub } from '../screens/ProjectsHub';
 import { generateId } from '../utils';
 
 interface MuseProps {

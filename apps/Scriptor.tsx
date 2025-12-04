@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
 import { NavItem, ScriptorView, Project, ScriptorDoc, Workspace } from '../types';
 import { FileText, Settings, LayoutTemplate, Home, Folder } from '../components/icons/Icons';
-import { ScriptorDashboard } from '../pages/scriptor/ScriptorDashboard';
-import { SpaceExplorer } from '../pages/scriptor/SpaceExplorer'; // This file will be reused but logically represents Project Documents
-import { DocumentEditor } from '../pages/scriptor/DocumentEditor';
-import { ScriptorTemplates } from '../pages/scriptor/ScriptorTemplates';
-import { ScriptorSettings } from '../pages/scriptor/ScriptorSettings'; // Import the new page
-import { ProjectsHub } from '../pages/ProjectsHub';
+import { ScriptorDashboard } from '../screens/scriptor/ScriptorDashboard';
+import { SpaceExplorer } from '../screens/scriptor/SpaceExplorer'; // This file will be reused but logically represents Project Documents
+import { DocumentEditor } from '../screens/scriptor/DocumentEditor';
+import { ScriptorTemplates } from '../screens/scriptor/ScriptorTemplates';
+import { ScriptorSettings } from '../screens/scriptor/ScriptorSettings'; // Import the new page
+import { ProjectsHub } from '../screens/ProjectsHub';
 import { generateId } from '../utils';
 
 interface ScriptorProps {
