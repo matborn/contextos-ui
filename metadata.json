@@ -1,0 +1,5 @@
+{
+  "name": "Copy of Enterprise Apps V2",
+  "description": "ContextOS is designed to make business, technical, and strategic documents:\n\n* faster to create\n* easier to maintain\n* more consistent\n* always up-to-date\n* validated against standards\n\nUsers should **not** need to understand technical concepts like “knowledge graphs,” “atoms,” or “capsules.”\nTheir experience must feel as simple as:\n\n> *“I need a document → I get a great first draft → I refine it → I check it → I finalize.”*\n\nBehind the scenes, the system handles all of the complexity.",
+  "requestFramePermissions": []
+}
