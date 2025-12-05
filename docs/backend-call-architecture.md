@@ -115,13 +115,14 @@ For the workspace landing / create flow:
   - `Workspace` (UI-focused shape, with nullable health/lastActive).
   - `WorkspaceAggregates`, `WorkspaceListResponse`.
 
-- **Service layer** (`services/workspaceService.ts` in current implementation):
-  - Today: calls `/api/v1/workspaces`/`{id}` directly with `fetch` and `X-User-*` headers.
-  - Next step: move this logic into a **server-only** module and expose it through BFF routes / server actions.
+- **Service layer** (`lib/workspaces.ts` + `app/api/workspaces`):
+  - Server-only domain service calls `/api/v1/workspaces` and maps Core shapes into UI types.
+  - Internal Next routes `/api/workspaces` and `/api/workspaces/[id]` are the **only** interfaces the browser can call.
+  - Client code (hooks like `useWorkspaces`) must never call Core directly; they call the BFF routes which attach auth headers server-side.
 
 - **Hook** (`hooks/useWorkspaces.ts`):
   - Handles loading/refresh/create/validation error state.
-  - Should talk to internal Next routes instead of the Core API once BFF routes exist.
+  - Talks exclusively to internal Next routes, not the Core API.
 
 - **UI** (`apps/ContextOS.tsx`, `screens/LandingPage.tsx`):
   - Uses the hook for interactive behavior.
@@ -146,4 +147,3 @@ For the workspace landing / create flow:
 - Introduce OpenAPI codegen once the number of endpoints we use justifies it.
 - Layer SWR/React Query on top of our internal BFF routes if we see repeated client data needs.
 - Add structured logging/metrics around domain services to observe Core API behavior (latency, error rates) centrally.
-
