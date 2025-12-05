@@ -166,7 +166,7 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                 placeholder="Select a workspace..."
                 options={availableWorkspaces.map((ws) => ({
                   value: ws.id,
-                  label: `${ws.name} (Health: ${ws.health}%)`,
+                  label: `${ws.name} (Health: ${ws.health ?? '—'}${typeof ws.health === 'number' ? '%' : ''})`,
                 }))}
               />
 

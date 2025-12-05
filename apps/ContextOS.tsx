@@ -1,13 +1,14 @@
 
 import React, { useState } from 'react';
 import { Layout } from '../components/Layout';
-import { NavItem, ContextView, AppMode, Workspace } from '../types';
-import { Database, Network, Settings, Home, Activity } from '../components/icons/Icons';
+import { NavItem, ContextView, AppMode } from '../types';
+import { Database, Settings, Activity } from '../components/icons/Icons';
 import { LandingPage } from '../screens/LandingPage';
 import { KnowledgeBase } from '../screens/KnowledgeBase';
 import { Settings as SettingsPage } from '../screens/Settings';
 import { Workspace as WorkspaceDashboard } from '../screens/Workspace';
-import { generateId } from '../utils';
+import { useWorkspaces } from '../hooks/useWorkspaces';
+import { useToast } from '../components/ui/Toast';
 
 interface ContextOSProps {
     onExit: () => void;
@@ -15,21 +16,26 @@ interface ContextOSProps {
     initialView?: ContextView;
 }
 
-const MOCK_WORKSPACES: Workspace[] = [
-    { id: 'ws-1', name: 'Project Titan', description: 'Global payments overhaul', visibility: 'private', health: 94, memberCount: 12, lastActive: new Date() },
-    { id: 'ws-2', name: 'Marketing Launch', description: 'Q3 Brand Campaign', visibility: 'public', health: 88, memberCount: 5, lastActive: new Date(Date.now() - 86400000) },
-    { id: 'ws-3', name: 'Compliance 2024', description: 'ISO 27001 Audit Prep', visibility: 'protected', health: 91, memberCount: 3, lastActive: new Date(Date.now() - 172800000) },
-];
-
 export const ContextOS: React.FC<ContextOSProps> = ({ onExit, onLaunch, initialView }) => {
     // Navigation State
     const [currentView, setCurrentView] = useState<ContextView>(initialView || 'landing');
-    
-    // Workspace State
-    const [workspaces, setWorkspaces] = useState<Workspace[]>(MOCK_WORKSPACES);
     const [activeWorkspaceId, setActiveWorkspaceId] = useState<string | null>(null);
-
-    const activeWorkspace = workspaces.find(w => w.id === activeWorkspaceId) || null;
+    const { showToast } = useToast();
+    const {
+        workspaces,
+        aggregates,
+        activeWorkspace,
+        loading,
+        isRefreshing,
+        isEmpty,
+        error,
+        validationErrors,
+        isCreating,
+        actionError,
+        refresh,
+        fetchWorkspaceDetail,
+        createWorkspace,
+    } = useWorkspaces();
 
     // Navigation Items - Dynamic based on Context
     // Removed "Atlas Home" to clean up top nav as requested
@@ -41,36 +47,33 @@ export const ContextOS: React.FC<ContextOSProps> = ({ onExit, onLaunch, initialV
         { id: 'settings', label: 'Settings', icon: <Settings size={16} /> },
     ];
     
-    const handleSwitchWorkspace = (id: string) => {
+    const handleSwitchWorkspace = async (id: string) => {
         if (id === 'home') {
             setActiveWorkspaceId(null);
             setCurrentView('landing');
         } else {
-            setActiveWorkspaceId(id);
-            setCurrentView('workspace');
+            try {
+                await fetchWorkspaceDetail(id);
+                setActiveWorkspaceId(id);
+                setCurrentView('workspace');
+            } catch (err) {
+                showToast('Unable to open workspace', { type: 'error' });
+            }
         }
     };
 
-    const handleCreateWorkspace = (name: string, visibility: 'private' | 'public' | 'protected') => {
-        const newWs: Workspace = {
-            id: generateId(),
-            name,
-            description: 'New Workspace',
-            visibility,
-            health: 100,
-            memberCount: 1,
-            lastActive: new Date()
-        };
-        setWorkspaces(prev => [...prev, newWs]);
-        setActiveWorkspaceId(newWs.id);
-        setCurrentView('workspace');
-    };
-
-    // DEMO ONLY: Reset state to empty
-    const demoResetEmpty = () => {
-        setWorkspaces([]);
-        setActiveWorkspaceId(null);
-        setCurrentView('landing');
+    const handleCreateWorkspace = async (input: { name: string; description?: string; visibility: 'private' | 'public' | 'protected' }) => {
+        try {
+            const created = await createWorkspace(input);
+            if (created?.id) {
+                setActiveWorkspaceId(created.id);
+                setCurrentView('workspace');
+                showToast('Workspace created', { type: 'success' });
+            }
+        } catch (err) {
+            showToast('Create workspace failed', { type: 'error', message: err instanceof Error ? err.message : undefined });
+            throw err;
+        }
     };
 
     const renderView = () => {
@@ -79,9 +82,16 @@ export const ContextOS: React.FC<ContextOSProps> = ({ onExit, onLaunch, initialV
                 return (
                     <LandingPage 
                         workspaces={workspaces}
+                        aggregates={aggregates}
+                        loading={loading}
+                        isRefreshing={isRefreshing}
+        validationErrors={validationErrors}
+        isCreating={isCreating}
+        actionError={actionError}
+        error={error}
                         onSelectWorkspace={(id) => handleSwitchWorkspace(id)}
                         onCreateWorkspace={handleCreateWorkspace}
-                        onDemoReset={demoResetEmpty}
+                        onRefresh={refresh}
                     />
                 );
             case 'workspace': 
@@ -115,7 +125,7 @@ export const ContextOS: React.FC<ContextOSProps> = ({ onExit, onLaunch, initialV
             currentWorkspace={activeWorkspace}
             allWorkspaces={workspaces}
             onSwitchWorkspace={handleSwitchWorkspace}
-            onCreateWorkspace={handleCreateWorkspace}
+            onCreateWorkspace={(name, visibility) => handleCreateWorkspace({ name, visibility })}
         >
             {renderView()}
         </Layout>
