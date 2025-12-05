@@ -63,7 +63,8 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
     </div>
   );
 
-  const root = document.getElementById('root');
-  if (!root) return null;
-  return ReactDom.createPortal(modalContent, root);
+  // Use the app root when available (Vite uses #root, Next uses #__next); fall back to body.
+  const portalTarget = document.getElementById('root') || document.getElementById('__next') || document.body;
+  if (!portalTarget) return null;
+  return ReactDom.createPortal(modalContent, portalTarget);
 };

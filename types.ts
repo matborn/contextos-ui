@@ -105,15 +105,31 @@ export interface User {
 // --- Workspace Models (Atlas Knowledge Containers) ---
 
 export type WorkspaceVisibility = 'private' | 'protected' | 'public';
+export type WorkspaceStatus = 'active' | 'archived';
 
 export interface Workspace {
   id: string;
   name: string;
-  description: string;
+  description?: string | null;
   visibility: WorkspaceVisibility;
-  health: number; // 0-100
+  status?: WorkspaceStatus;
   memberCount: number;
-  lastActive: Date;
+  health: number | null;
+  lastActive?: string | Date | null;
+  createdAt?: string | Date | null;
+  ownerId?: string;
+}
+
+export interface WorkspaceAggregates {
+  totalWorkspaces: number;
+  totalMembers: number;
+  avgHealth: number | null;
+}
+
+export interface WorkspaceListResponse {
+  workspaces: Workspace[];
+  total: number;
+  aggregates: WorkspaceAggregates | null;
 }
 
 // --- Project Models (Work Containers) ---

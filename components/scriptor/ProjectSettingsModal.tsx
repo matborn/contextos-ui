@@ -162,7 +162,7 @@ export const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({
                 >
                   <option value="" disabled>Select a workspace...</option>
                   {availableWorkspaces.map(ws => (
-                    <option key={ws.id} value={ws.id}>{ws.name} (Health: {ws.health}%)</option>
+                    <option key={ws.id} value={ws.id}>{ws.name} (Health: {ws.health ?? '—'}{typeof ws.health === 'number' ? '%' : ''})</option>
                   ))}
                 </select>
               </div>

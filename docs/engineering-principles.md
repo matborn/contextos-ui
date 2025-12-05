@@ -6,6 +6,7 @@ Concise, front-end–focused guardrails that harmonize with our design system an
 - Keep business/interaction logic decoupled from I/O (fetch/SDK calls). Pass data/clients in; do not create them deep in components.
 - Use stable technical names in code (per ADR); keep marketing names in copy/mapping tables.
 - Archived surfaces stay frozen—do not refactor, restyle, or DS-migrate anything under `archived/` unless a ticket explicitly scopes a fix there.
+- Treat the Next.js app as a **Backend-for-Frontend** for the Core Graph API: Core endpoints are called server-side only (via `lib/*`), while client code talks to internal Next routes/server actions. See `docs/backend-call-architecture.md` for patterns.
 
 ## Components & Layout
 - One component, one purpose; if you need “and” to describe it, split it.
