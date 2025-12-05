@@ -192,6 +192,9 @@ Before opening a PR you MUST confirm:
 10. Vitest 2+ with Vite 7 expects ESM config files—rename `vitest.config.ts` to `.mts` (or mark the package as ESM) so `@vitejs/plugin-react` isn’t required via CommonJS.
 11. Always check `@contextos/ui` for existing components (like `Button`) before using raw HTML elements to avoid lint errors and ensure consistency.
 12. When porting designs from a demo or prototype, check if the icons or assets are available in the shared packages or need to be copied/created.
+13. When proxying SSE through Next route handlers, stream the upstream `response.body` with `text/event-stream` headers instead of reading it so EventSource clients stay connected.
+14. Avoid `this` inside object-literal service helpers; call the module export directly so spies and nested callbacks don’t lose context.
+15. Storybook 10 + `@storybook/nextjs-vite` lacks exported `navigation.mock`/`router.mock`; if Vitest browser runs fail with `dist/index.js/navigation.mock` resolution, disable that project or stub the mocks locally instead of piling on `optimizeDeps` hacks.
 
 ---
 

@@ -33,7 +33,7 @@ export interface RadioGroupProps extends Omit<React.FieldsetHTMLAttributes<HTMLF
   orientation?: 'vertical' | 'horizontal';
 }
 
-export interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
+export interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label: string;
   description?: string;
 }

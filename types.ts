@@ -317,9 +317,206 @@ export interface DataSource {
   id: string;
   type: 'confluence' | 'slack' | 'gdrive' | 'web';
   name: string;
-  status: 'synced' | 'syncing' | 'error';
+  status: 'synced' | 'syncing' | 'error' | 'never_synced';
   lastSync: string;
   itemsFound?: number;
+}
+
+// --- Connectors & Ingestion ---
+
+export type ConnectorStatus = 'synced' | 'syncing' | 'error' | 'never_synced';
+
+export interface Connector {
+  id: string;
+  type: string;
+  status: ConnectorStatus;
+  lastSync: string | null;
+  itemsFound: number | null;
+  error: string | null;
+  retryAfterSeconds: number | null;
+  authUrl: string | null;
+  manageUrl: string | null;
+}
+
+export type StageStatus = 'pending' | 'processing' | 'done' | 'error';
+
+export interface StageProgress {
+  state: StageStatus;
+  startedAt?: string | null;
+  finishedAt?: string | null;
+  progressPct?: number | null;
+}
+
+export interface KnowledgeSourceStages {
+  extraction?: StageProgress;
+  embedding?: StageProgress;
+  clustering?: StageProgress;
+  conflictChecks?: StageProgress;
+}
+
+export type KnowledgeSourceStatus = 'queued' | 'processing' | 'done' | 'error';
+
+export interface KnowledgeSourceSummary {
+  knowledgeSourceId: string;
+  title: string;
+  sourceType: string;
+  status: KnowledgeSourceStatus;
+  stages: KnowledgeSourceStages;
+  createdAt?: string | null;
+}
+
+export interface KnowledgeSourceListResponse {
+  knowledgeSources: KnowledgeSourceSummary[];
+  total: number;
+}
+
+export interface KnowledgeSourceStatusResponse {
+  knowledgeSourceId: string;
+  status: KnowledgeSourceStatus;
+  stages: KnowledgeSourceStages;
+  retryAfterSeconds?: number | null;
+}
+
+export interface KnowledgeSourceUploadRequest {
+  mimeType?: string | null;
+}
+
+export interface KnowledgeSourceUploadResponse {
+  uploadUrl: string;
+  token: string;
+  expiresAt: string;
+  maxSizeBytes: number;
+  allowedMimeTypes: string[];
+  mimeType?: string | null;
+}
+
+export interface KnowledgeSourceCreateRequest {
+  content?: string | null;
+  metadata?: Record<string, unknown>;
+  mimeType?: string | null;
+  ocrEnabled?: boolean | null;
+  sizeBytes?: number | null;
+  sourceType?: string | null;
+  title?: string | null;
+  uploadToken?: string | null;
+}
+
+export interface KnowledgeSourceCreateResponse {
+  knowledgeSourceId: string;
+  status: KnowledgeSourceStatus;
+}
+
+export interface StagingConflictDetail {
+  conflictsWith?: string | null;
+  severity?: string | null;
+  resolutionHint?: string | null;
+}
+
+export interface StagingItem {
+  id: string;
+  type: string;
+  content: string;
+  confidence?: number | null;
+  aiActionTaken?: string | null;
+  conflict?: StagingConflictDetail | null;
+}
+
+export interface StagingCluster {
+  id: string;
+  title: string;
+  summary?: string | null;
+  knowledgeSourceId: string;
+  items: StagingItem[];
+  risksCount?: number;
+  conflictStatus?: string;
+  conflictCount?: number | null;
+  promoted?: boolean;
+  rejected?: boolean;
+}
+
+export interface StagingClusterListResponse {
+  clusters: StagingCluster[];
+  total: number;
+}
+
+export interface InsightSourceSummary {
+  id: string;
+  title: string;
+}
+
+export interface Insight {
+  id: string;
+  typeName: string;
+  content: string;
+  status: string;
+  layer?: string;
+  confidence?: number | null;
+  source?: InsightSourceSummary | null;
+  updatedAt?: string | null;
+}
+
+export interface InsightCounts {
+  status: string;
+  count: number;
+}
+
+export interface InsightListResponse {
+  insights: Insight[];
+  counts: InsightCounts[];
+  total: number;
+}
+
+export interface EntityHealthAlert {
+  id: string;
+  severity: string;
+  message: string;
+}
+
+export interface EntitySummary {
+  id: string;
+  name: string;
+  type: string;
+}
+
+export interface EntityHealth {
+  status: string;
+  alerts: EntityHealthAlert[];
+}
+
+export interface EntityLineageEdge {
+  id: string;
+  type: string;
+  relation: string;
+}
+
+export interface EntityLineage {
+  incoming: EntityLineageEdge[];
+  outgoing: EntityLineageEdge[];
+}
+
+export interface EntityCounts {
+  upstream?: number | null;
+  downstream?: number | null;
+}
+
+export interface EntityDetail {
+  id: string;
+  name: string;
+  type: string;
+  ownerUserId: string;
+  visibility: string;
+  sensitivity: string;
+  domains: string[];
+  sharedWith: string[];
+  attributes: Record<string, unknown>;
+  health?: EntityHealth | null;
+  lineage?: EntityLineage | null;
+  counts?: EntityCounts | null;
+}
+
+export interface EntityListResponse {
+  entities: EntitySummary[];
+  total: number;
 }
 
 // AI Agent Types
@@ -454,12 +651,13 @@ export interface InsightCardSpec extends BaseComponentSpec {
 
 export interface SmartFormSpec extends BaseComponentSpec {
   type: 'form';
-  fields: { 
-      id: string; 
-      label: string; 
-      type: 'text' | 'currency' | 'textarea' | 'date' | 'select'; 
-      required?: boolean; 
-      placeholder?: string;
+  fields: {
+    id: string;
+    label: string;
+    type: 'text' | 'currency' | 'textarea' | 'date' | 'select';
+    required?: boolean;
+    placeholder?: string;
+    options?: { value: string; label: string }[]; // for select
   }[];
   submitLabel: string;
 }

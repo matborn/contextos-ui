@@ -1,15 +1,17 @@
 import React from 'react';
 import { DataSource } from '../../types';
-import { Database, LinkIcon, FileText, MessageSquare, Check, AlertCircle, Loader2, FilePlus } from '../icons/Icons';
+import { Database, LinkIcon, FileText, MessageSquare, Check, AlertCircle, Loader2, FilePlus, RefreshCw } from '../icons/Icons';
 import { cn } from '../../utils';
 import { Button } from './Button';
 
 interface ConnectorsProps {
   dataSources: DataSource[];
   onAddSource?: () => void;
+  onSync?: (id: string) => void;
+  syncingId?: string | null;
 }
 
-export const Connectors: React.FC<ConnectorsProps> = ({ dataSources, onAddSource }) => {
+export const Connectors: React.FC<ConnectorsProps> = ({ dataSources, onAddSource, onSync, syncingId }) => {
   const getIcon = (type: DataSource['type']) => {
     switch(type) {
       case 'confluence': return <FileText size={16} />;
@@ -25,6 +27,7 @@ export const Connectors: React.FC<ConnectorsProps> = ({ dataSources, onAddSource
       case 'synced': return 'text-green-500 bg-green-50';
       case 'syncing': return 'text-blue-500 bg-blue-50';
       case 'error': return 'text-red-500 bg-red-50';
+      case 'never_synced': return 'text-slate-500 bg-slate-100';
     }
   };
 
@@ -39,7 +42,7 @@ export const Connectors: React.FC<ConnectorsProps> = ({ dataSources, onAddSource
       
       <div className="space-y-2">
         {dataSources.map((source) => (
-          <div key={source.id} className="group flex items-center p-2 rounded-lg border border-transparent hover:border-slate-200 hover:bg-white transition-all cursor-pointer">
+          <div key={source.id} className="group flex items-center p-2 rounded-lg border border-transparent hover:border-slate-200 hover:bg-white transition-all">
             <div className={cn("w-8 h-8 rounded-md flex items-center justify-center mr-3 shrink-0", 
               source.type === 'slack' ? 'bg-[#4A154B]/10 text-[#4A154B]' : 
               source.type === 'confluence' ? 'bg-[#0052CC]/10 text-[#0052CC]' :
@@ -52,16 +55,30 @@ export const Connectors: React.FC<ConnectorsProps> = ({ dataSources, onAddSource
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-slate-900 truncate">{source.name}</p>
               <div className="flex items-center gap-2">
-                  <p className="text-[10px] text-slate-500">
-                    {source.status === 'syncing' ? 'Indexing...' : `Last sync: ${source.lastSync}`}
-                  </p>
+                <p className="text-[10px] text-slate-500">
+                  {source.status === 'syncing' ? 'Indexing...' : source.status === 'never_synced' ? 'Never synced' : `Last sync: ${source.lastSync}`}
+                </p>
               </div>
             </div>
 
-            <div className={cn("w-6 h-6 rounded-full flex items-center justify-center shrink-0", getStatusColor(source.status))}>
-               {source.status === 'synced' && <Check size={12} />}
-               {source.status === 'syncing' && <Loader2 size={12} className="animate-spin"/>}
-               {source.status === 'error' && <AlertCircle size={12} />}
+            <div className="flex items-center gap-2">
+              {onSync && (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => onSync(source.id)}
+                  disabled={syncingId === source.id}
+                >
+                  {syncingId === source.id ? <Loader2 size={12} className="animate-spin" /> : <RefreshCw size={12} />}
+                  <span className="ml-1 text-[11px]">Sync</span>
+                </Button>
+              )}
+              <div className={cn("w-6 h-6 rounded-full flex items-center justify-center shrink-0", getStatusColor(source.status))}>
+                {source.status === 'synced' && <Check size={12} />}
+                {source.status === 'syncing' && <Loader2 size={12} className="animate-spin"/>}
+                {source.status === 'error' && <AlertCircle size={12} />}
+                {source.status === 'never_synced' && <FilePlus size={12} />}
+              </div>
             </div>
           </div>
         ))}

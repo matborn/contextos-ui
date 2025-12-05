@@ -45,6 +45,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const selectId = id ?? generatedId;
     const messageId = `${selectId}-message`;
 
+    const hasLeftIcon = Boolean(leftIcon);
+    const hasRightAdornment = Boolean(rightIcon || loading);
+
     return (
       <div className="w-full space-y-1.5">
         {label && (
@@ -65,8 +68,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             className={cn(
               fieldBase,
               'appearance-none pr-10',
-              leftIcon && 'pl-10',
-              (rightIcon || loading) && 'pr-12',
+              hasLeftIcon && 'pl-10',
+              hasRightAdornment && 'pr-12',
               error && fieldError,
               disabled && fieldDisabled,
               className

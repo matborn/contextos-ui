@@ -44,12 +44,18 @@ const meta = {
     },
   },
   tags: ['autodocs'],
+  args: {
+    children: null,
+  },
 } satisfies Meta<typeof Table>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  args: {
+    children: null,
+  },
   render: () => (
     <Table>
       <TableCaption>Datasets currently synced into Atlas.</TableCaption>
@@ -84,6 +90,9 @@ export const Default: Story = {
 };
 
 export const Loading: Story = {
+  args: {
+    children: null,
+  },
   render: () => (
     <Table>
       <TableHeader>
@@ -94,12 +103,15 @@ export const Loading: Story = {
           <TableHead className="text-right">Records</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody isLoading colSpan={4} />
+      <TableBody isLoading colSpan={4}>{null}</TableBody>
     </Table>
   ),
 };
 
 export const Empty: Story = {
+  args: {
+    children: null,
+  },
   render: () => (
     <Table>
       <TableHeader>
@@ -110,12 +122,17 @@ export const Empty: Story = {
           <TableHead className="text-right">Records</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody isLoading={false} colSpan={4} emptyMessage="No datasets synced yet." />
+      <TableBody isLoading={false} colSpan={4} emptyMessage="No datasets synced yet.">
+        {null}
+      </TableBody>
     </Table>
   ),
 };
 
 export const InteractiveRows: Story = {
+  args: {
+    children: null,
+  },
   render: () => {
     const handleSelect = fn();
     return (
