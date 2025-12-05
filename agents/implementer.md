@@ -95,7 +95,7 @@ You MUST NOT output anything outside the required implementation workflow.
 
 ## Tests
 
-* List new/updated tests (Vitest, Storybook interaction, Playwright).
+* List new/updated tests (Vitest, Storybook interaction, Playwright) by command and outcome only. **Do not paste raw console logs or ANSI output**—summaries only. If a command fails, summarize the error in one line.
 * Note intentional gaps.
 * Execution checklist:
 
