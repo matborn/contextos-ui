@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint components/ui stories --ext .ts,.tsx,.js,.jsx --ignore-pattern stories/ArchivedScreens.stories.tsx",
+    "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test": "vitest run"

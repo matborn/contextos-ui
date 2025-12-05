@@ -60,6 +60,14 @@ export const AlertCircle: React.FC<IconProps> = ({ className, size = 24, ...prop
   </svg>
 );
 
+export const AlertTriangle: React.FC<IconProps> = ({ className, size = 24, ...props }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>
+    <path d="m10.29 3.86-7.33 12.73A2 2 0 0 0 4.67 19h14.66a2 2 0 0 0 1.71-3.41L13.71 3.86a2 2 0 0 0-3.42 0Z" />
+    <line x1="12" y1="9" x2="12" y2="13" />
+    <line x1="12" y1="17" x2="12.01" y2="17" />
+  </svg>
+);
+
 export const Search: React.FC<IconProps> = ({ className, size = 24, ...props }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>
     <circle cx="11" cy="11" r="8" />
@@ -190,6 +198,15 @@ export const LinkIcon: React.FC<IconProps> = ({ className, size = 24, ...props }
 export const MessageSquare: React.FC<IconProps> = ({ className, size = 24, ...props }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
+export const UploadCloud: React.FC<IconProps> = ({ className, size = 24, ...props }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>
+    <path d="m8 17 4-4 4 4" />
+    <path d="M12 12v9" />
+    <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
+    <path d="M16 16a3 3 0 0 1 0 6" />
   </svg>
 );
 

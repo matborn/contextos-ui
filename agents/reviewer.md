@@ -183,6 +183,7 @@ When the review is complete, your output MUST be one of:
 - Story controls typing: prefer wrapper demo components with `satisfies Meta<typeof Demo>` and `StoryObj<typeof Demo>` instead of casting the real component; avoids `component as unknown as` hacks and keeps args typed.
 - Pre-commit checks flakiness: keep `apps/platform/test-results/.last-run.json` tracked with `{}` before running `scripts/check-commit.sh`; missing file causes churn and lockfiles when git add/remove toggles during repeated runs.
 - Stale git locks: after any aborted commit, remove `.git/index.lock` once and re-run checks instead of retrying commits while the lock persists; otherwise you bounce between lock errors and failed check scripts.
+- Storybook + Vitest browser: `@storybook/nextjs-vite` in v10 doesn’t export `navigation.mock`/`router.mock`, so Vitest will resolve to `dist/index.js/navigation.mock` and fail; if you see that signature error, push to disable the Storybook browser project or add local shims instead of requesting more alias/optimizeDeps tweaks.
 
 ### **1. Approval**
 

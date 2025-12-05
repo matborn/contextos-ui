@@ -18,7 +18,7 @@ interface AlertBannerProps {
   isActionLoading?: boolean;
 }
 
-const toneStyles: Record<BannerTone, { container: string; icon: JSX.Element; text: string; border: string }> = {
+const toneStyles: Record<BannerTone, { container: string; icon: React.ReactElement; text: string; border: string }> = {
   success: {
     container: 'bg-green-50 border-green-200',
     icon: <CheckCircle className="text-green-600" size={20} />,

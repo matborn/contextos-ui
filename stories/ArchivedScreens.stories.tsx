@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import React from 'react';
 import { ToastProvider } from '../components/ui/Toast';
 import { ContextDashboard } from '../archived/screens/ContextDashboard';
@@ -86,10 +86,10 @@ export const TeamStory: Story = {
 
 export const WizardPageStory: Story = {
   name: 'WizardPage',
-  render: () => <WizardPage />,
+  render: () => <WizardPage onOpenDocument={() => {}} onCancel={() => {}} />,
 };
 
 export const WorkspaceExplorerStory: Story = {
   name: 'WorkspaceExplorer',
-  render: () => <WorkspaceExplorer />,
+  render: () => <WorkspaceExplorer onNavigate={() => {}} />,
 };
